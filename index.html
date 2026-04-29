@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a la Inteligencia Artificial (IA)</title>
+
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            /* Evita scroll general */
+            background-color: #f8fafc;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, visibility 0.6s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            background-color: #f8fafc;
+            /* bg-slate-50 */
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Diseños específicos de fondos */
+        .bg-gradient-cover {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+        }
+
+        .bg-gradient-accent {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+        }
+
+        /* Tarjetas estilo vidrio (Glassmorphism) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Barra de progreso */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            z-index: 50;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: #0284c7;
+            width: 0%;
+            transition: width 0.4s ease-out;
+        }
+
+        /* Controles de navegación */
+        #controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #slide-counter {
+            font-weight: 600;
+            color: #475569;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #cbd5e1;
+        }
+
+        @media (max-width: 768px) {
+            #controls {
+                bottom: 1rem;
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+            .slide {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barra de progreso -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- Controles -->
+    <div id="controls">
+        <button id="prevBtn" class="nav-btn" onclick="prevSlide()" title="Anterior">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <div id="slide-counter">1 / 16</div>
+        <button id="nextBtn" class="nav-btn" onclick="nextSlide()" title="Siguiente">
+            <i data-lucide="chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Contenedor de Diapositivas -->
+    <div id="presentation">
+
+        <!-- 1. Portada -->
+        <div class="slide active bg-gradient-cover text-center">
+            <div class="max-w-4xl w-full">
+                <i data-lucide="cpu" class="w-20 h-20 mx-auto mb-8 text-sky-400"></i>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Introducción a la <br><span
+                        class="text-sky-400">Inteligencia Artificial</span></h1>
+                <p class="text-xl md:text-3xl text-slate-300 mb-12">Transformando las profesiones del mañana:
+                    Contabilidad, Enfermería y Derecho</p>
+                <div class="inline-block bg-white/10 px-8 py-3 rounded-full backdrop-blur-sm border border-white/20">
+                    <p class="text-lg font-medium text-sky-100">Docente: [Escribe tu nombre aquí]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Pregunta inicial -->
+        <div class="slide">
+            <div class="max-w-5xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">¿Dónde utilizas IA en tu
+                    vida diaria?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-2xl text-center">
+                        <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="smartphone" class="w-10 h-10 text-blue-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">Redes Sociales</h3>
+                        <p class="text-slate-600 text-lg">El algoritmo que decide qué video ves en TikTok o qué
+                            publicación aparece en Instagram.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-2xl text-center">
+                        <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="map" class="w-10 h-10 text-green-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">Navegación</h3>
+                        <p class="text-slate-600 text-lg">Waze o Google Maps calculando la ruta más rápida y evitando el
+                            tráfico en tiempo real.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-2xl text-center">
+                        <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="mic" class="w-10 h-10 text-purple-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">Asistentes & Apps</h3>
+                        <p class="text-slate-600 text-lg">Siri, Alexa, reconocimiento facial o cuando Netflix te
+                            recomienda tu próxima serie favorita.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Qué es la IA -->
+        <div class="slide">
+            <div class="max-w-6xl w-full flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1">
+                    <h2 class="text-4xl md:text-6xl font-bold text-slate-800 mb-8">¿Qué es realmente <br>la IA?</h2>
+                    <div class="bg-sky-50 border-l-4 border-sky-500 p-6 rounded-r-xl mb-8">
+                        <p class="text-2xl text-slate-700 leading-relaxed">
+                            Es la capacidad de un sistema informático para imitar funciones cognitivas humanas, como
+                            <strong class="text-sky-700">aprender, razonar y resolver problemas</strong>.
+                        </p>
+                    </div>
+                    <p class="text-xl text-slate-600 flex items-center gap-3">
+                        <i data-lucide="info" class="text-slate-400"></i>
+                        ¡No es magia ni ciencia ficción! Son matemáticas, datos y código trabajando juntos.
+                    </p>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <div
+                        class="relative w-80 h-80 bg-gradient-to-tr from-sky-400 to-indigo-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <i data-lucide="brain-circuit" class="w-40 h-40 text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Video Introductorio (Reproductor Incrustado) -->
+        <div class="slide bg-slate-900 text-white">
+            <div class="max-w-5xl w-full mx-auto text-center">
+                <div
+                    class="inline-flex items-center gap-3 px-6 py-2 bg-sky-500/20 text-sky-400 rounded-full mb-8 font-semibold text-lg">
+                    <i data-lucide="play-circle"></i> Para entenderlo mejor...
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-10 text-white">Un vistazo rápido a la IA</h2>
+
+                <!-- Reproductor de YouTube Real -->
+                <div
+                    class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(56,189,248,0.15)] border border-slate-700 bg-black mb-6">
+                    <iframe class="absolute top-0 left-0 w-full h-full"
+                        src="https://www.youtube.com/embed/qlxE7HbmDUw?rel=0"
+                        title="Video Introductorio a la Inteligencia Artificial" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <p class="text-slate-400 text-sm mt-4">
+                    *Nota: Al abrir este archivo HTML localmente en tu navegador, el video se reproducirá aquí mismo.*
+                </p>
+            </div>
+        </div>
+
+        <!-- 5. Ejemplos actuales -->
+        <div class="slide">
+            <div class="max-w-5xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">La IA en el mundo de hoy
+                    (2024-2025)</h2>
+                <div class="space-y-6">
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-6">
+                        <div class="bg-slate-100 p-4 rounded-full"><i data-lucide="message-square"
+                                class="w-8 h-8 text-slate-700"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">Chatbots Avanzados</h3>
+                            <p class="text-lg text-slate-600">ChatGPT, Claude, Gemini (para redacción, resúmenes, y
+                                lluvia de ideas).</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-6">
+                        <div class="bg-slate-100 p-4 rounded-full"><i data-lucide="briefcase"
+                                class="w-8 h-8 text-slate-700"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">Automatización en Empresas</h3>
+                            <p class="text-lg text-slate-600">Herramientas como Microsoft Copilot integrando IA
+                                directamente en Word, Excel y correos.</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-6">
+                        <div class="bg-slate-100 p-4 rounded-full"><i data-lucide="palette"
+                                class="w-8 h-8 text-slate-700"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">Generación de Contenido</h3>
+                            <p class="text-lg text-slate-600">Creación instantánea de imágenes, traducciones en tiempo
+                                real y análisis profundo de datos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. ¿Cómo funciona? -->
+        <div class="slide">
+            <div class="max-w-6xl w-full text-center">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-16">¿Cómo funciona? (En 4 pasos)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+                    <!-- Line connector for desktop -->
+                    <div
+                        class="hidden md:block absolute top-1/2 left-10 right-10 h-1 bg-slate-200 -z-10 transform -translate-y-1/2">
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100 relative">
+                        <div
+                            class="w-12 h-12 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 relative z-10">
+                            1</div>
+                        <i data-lucide="database" class="w-10 h-10 text-slate-700 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Datos</h3>
+                        <p class="text-slate-600">La "comida" de la IA. Se alimenta de miles o millones de ejemplos.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100 relative">
+                        <div
+                            class="w-12 h-12 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 relative z-10">
+                            2</div>
+                        <i data-lucide="code" class="w-10 h-10 text-slate-700 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Algoritmos</h3>
+                        <p class="text-slate-600">Las reglas matemáticas que procesan y ordenan toda esa información.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100 relative">
+                        <div
+                            class="w-12 h-12 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 relative z-10">
+                            3</div>
+                        <i data-lucide="network" class="w-10 h-10 text-slate-700 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Aprendizaje</h3>
+                        <p class="text-slate-600">El sistema encuentra patrones ocultos en los datos procesados.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100 relative">
+                        <div
+                            class="w-12 h-12 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 relative z-10">
+                            4</div>
+                        <i data-lucide="target" class="w-10 h-10 text-slate-700 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Decisión</h3>
+                        <p class="text-slate-600">La IA da una respuesta, predicción o resultado basado en lo aprendido.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Machine Learning -->
+        <div class="slide bg-slate-800 dark text-white">
+            <div class="max-w-5xl w-full flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1 text-center md:text-left">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500/20 text-sky-400 rounded-full mb-6 font-semibold">
+                        <i data-lucide="bot"></i> Concepto Clave
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6">Machine Learning</h2>
+                    <p class="text-2xl text-slate-300 mb-8 leading-relaxed">
+                        Es una rama de la IA donde las máquinas <strong class="text-white">aprenden de los
+                            datos</strong> sin ser programadas paso a paso para cada tarea. Mejoran con la experiencia.
+                    </p>
+                    <div class="glass-card p-6 rounded-xl text-left border-l-4 border-l-sky-500">
+                        <h4 class="font-bold text-xl mb-2 flex items-center gap-2"><i data-lucide="mail-warning"
+                                class="text-sky-400"></i> Ejemplo Práctico</h4>
+                        <p class="text-slate-300">El filtro de SPAM de tu correo. Nadie programó la palabra exacta
+                            "Ganaste la lotería", la IA aprendió sola que esos correos suelen ser basura al analizar
+                            millones de ejemplos previos.</p>
+                    </div>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <i data-lucide="shield-check" class="w-64 h-64 text-sky-400/80"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Tipos de IA -->
+        <div class="slide">
+            <div class="max-w-6xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">Dos grandes categorías de IA
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                    <div class="glass-card p-10 rounded-2xl border-t-4 border-t-emerald-500 flex flex-col">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="bg-emerald-100 p-3 rounded-xl text-emerald-600"><i data-lucide="check-circle"
+                                    class="w-8 h-8"></i></div>
+                            <h3 class="text-3xl font-bold text-slate-800">IA Débil / Estrecha</h3>
+                            <span
+                                class="ml-auto bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold">El
+                                Presente</span>
+                        </div>
+                        <ul class="text-xl text-slate-600 space-y-4 flex-grow">
+                            <li class="flex items-start gap-3"><i data-lucide="arrow-right"
+                                    class="mt-1 text-emerald-500 w-5 h-5 flex-shrink-0"></i> Diseñada para <strong>una
+                                    sola tarea específica</strong>.</li>
+                            <li class="flex items-start gap-3"><i data-lucide="arrow-right"
+                                    class="mt-1 text-emerald-500 w-5 h-5 flex-shrink-0"></i> No posee conciencia ni
+                                entendimiento real.</li>
+                            <li class="flex items-start gap-3"><i data-lucide="arrow-right"
+                                    class="mt-1 text-emerald-500 w-5 h-5 flex-shrink-0"></i> <strong>Ejemplos:</strong>
+                                Asistentes virtuales, reconocimiento facial, vehículos autónomos.</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card p-10 rounded-2xl border-t-4 border-t-indigo-500 flex flex-col">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="bg-indigo-100 p-3 rounded-xl text-indigo-600"><i data-lucide="rocket"
+                                    class="w-8 h-8"></i></div>
+                            <h3 class="text-3xl font-bold text-slate-800">IA Fuerte / General</h3>
+                            <span
+                                class="ml-auto bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">El
+                                Futuro</span>
+                        </div>
+                        <ul class="text-xl text-slate-600 space-y-4 flex-grow">
+                            <li class="flex items-start gap-3"><i data-lucide="arrow-right"
+                                    class="mt-1 text-indigo-500 w-5 h-5 flex-shrink-0"></i> Concepto teórico.</li>
+                            <li class="flex items-start gap-3"><i data-lucide="arrow-right"
+                                    class="mt-1 text-indigo-500 w-5 h-5 flex-shrink-0"></i> Una máquina con una
+                                <strong>inteligencia igual a la humana</strong> en cualquier área cognitiva.</li>
+                            <li class="flex items-start gap-3"><i data-lucide="arrow-right"
+                                    class="mt-1 text-indigo-500 w-5 h-5 flex-shrink-0"></i> <strong>Aún no
+                                    existe</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. IA en Contabilidad -->
+        <div class="slide bg-blue-50">
+            <div class="max-w-5xl w-full">
+                <div class="flex items-center justify-center gap-4 mb-10">
+                    <i data-lucide="calculator" class="w-12 h-12 text-blue-600"></i>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800">Aplicaciones en Contabilidad</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-red-50 p-4 rounded-full text-red-500"><i data-lucide="shield-alert"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Detección de Fraude</h3>
+                            <p class="text-lg text-slate-600">Análisis en tiempo real de miles de transacciones para
+                                identificar anomalías o patrones sospechosos al instante.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-green-50 p-4 rounded-full text-green-500"><i data-lucide="file-digit"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Automatización (RPA & OCR)</h3>
+                            <p class="text-lg text-slate-600">Extracción automática de datos de facturas y recibos
+                                físicos o digitales sin necesidad de teclear manualmente.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-purple-50 p-4 rounded-full text-purple-500"><i data-lucide="trending-up"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Predicción Financiera</h3>
+                            <p class="text-lg text-slate-600">Proyecciones de flujo de caja y presupuestos basados en el
+                                análisis profundo del historial de la empresa y tendencias del mercado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. IA en Enfermería -->
+        <div class="slide bg-teal-50">
+            <div class="max-w-5xl w-full">
+                <div class="flex items-center justify-center gap-4 mb-10">
+                    <i data-lucide="stethoscope" class="w-12 h-12 text-teal-600"></i>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800">Aplicaciones en Enfermería</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-rose-50 p-4 rounded-full text-rose-500"><i data-lucide="activity"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Monitoreo Predictivo</h3>
+                            <p class="text-lg text-slate-600">Algoritmos que analizan los signos vitales continuamente y
+                                alertan a las enfermeras horas antes de que un paciente sufra una crisis clínica.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-sky-50 p-4 rounded-full text-sky-500"><i data-lucide="clipboard-list"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Asistencia en Diagnósticos</h3>
+                            <p class="text-lg text-slate-600">Sistemas de apoyo clínico que realizan análisis rápido de
+                                radiografías o historiales médicos para ayudar al personal de salud.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-amber-50 p-4 rounded-full text-amber-500"><i data-lucide="mic"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Reducción de Burocracia</h3>
+                            <p class="text-lg text-slate-600">IA que transcribe por voz las notas de evolución de los
+                                pacientes en tiempo real, permitiendo más tiempo para el cuidado humano.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. IA en Derecho -->
+        <div class="slide bg-amber-50">
+            <div class="max-w-5xl w-full">
+                <div class="flex items-center justify-center gap-4 mb-10">
+                    <i data-lucide="scale" class="w-12 h-12 text-amber-700"></i>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800">Aplicaciones en el Derecho</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-slate-100 p-4 rounded-full text-slate-700"><i data-lucide="file-search"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Análisis de Contratos (LegalTech)</h3>
+                            <p class="text-lg text-slate-600">Revisión de miles de páginas en segundos para encontrar
+                                cláusulas de riesgo, fechas clave o inconsistencias.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-indigo-50 p-4 rounded-full text-indigo-500"><i data-lucide="book-open"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Búsqueda Inteligente</h3>
+                            <p class="text-lg text-slate-600">Encontrar jurisprudencia y precedentes exactos usando
+                                lenguaje natural, entendiendo el contexto y no solo palabras clave.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
+                        <div class="bg-fuchsia-50 p-4 rounded-full text-fuchsia-500"><i data-lucide="gavel"
+                                class="w-8 h-8"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Predicción de Litigios</h3>
+                            <p class="text-lg text-slate-600">Análisis estadístico de cómo han fallado ciertos jueces en
+                                casos similares en el pasado para trazar la mejor estrategia legal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. Ventajas -->
+        <div class="slide">
+            <div class="max-w-5xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">Ventajas de adoptar la IA
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="bg-white border-t-4 border-emerald-500 p-8 rounded-xl shadow-lg text-center transform transition hover:-translate-y-2">
+                        <div
+                            class="mx-auto bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="zap" class="text-emerald-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Rapidez</h3>
+                        <p class="text-slate-600">Procesamiento de volúmenes masivos de información en cuestión de
+                            segundos o milisegundos.</p>
+                    </div>
+                    <div
+                        class="bg-white border-t-4 border-emerald-500 p-8 rounded-xl shadow-lg text-center transform transition hover:-translate-y-2">
+                        <div
+                            class="mx-auto bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="crosshair" class="text-emerald-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Precisión</h3>
+                        <p class="text-slate-600">Reducción drástica del error humano en tareas que son monótonas,
+                            matemáticas o repetitivas.</p>
+                    </div>
+                    <div
+                        class="bg-white border-t-4 border-emerald-500 p-8 rounded-xl shadow-lg text-center transform transition hover:-translate-y-2">
+                        <div
+                            class="mx-auto bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="line-chart" class="text-emerald-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Eficiencia</h3>
+                        <p class="text-slate-600">Libera el tiempo del profesional para que se enfoque en la estrategia,
+                            el análisis ético y la empatía humana.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Riesgos -->
+        <div class="slide">
+            <div class="max-w-5xl w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">Riesgos y Desafíos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white border-t-4 border-red-500 p-8 rounded-xl shadow-lg text-center">
+                        <div class="mx-auto bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="alert-triangle" class="text-red-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Sesgos y Discriminación</h3>
+                        <p class="text-slate-600">Si la IA aprende de datos históricos con prejuicios humanos, la
+                            máquina repetirá y amplificará esos prejuicios.</p>
+                    </div>
+                    <div class="bg-white border-t-4 border-orange-500 p-8 rounded-xl shadow-lg text-center">
+                        <div class="mx-auto bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="x-octagon" class="text-orange-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Errores ("Alucinaciones")</h3>
+                        <p class="text-slate-600">La IA puede inventar información falsa o citar leyes que no existen
+                            con mucha seguridad. Siempre requiere supervisión.</p>
+                    </div>
+                    <div class="bg-white border-t-4 border-yellow-500 p-8 rounded-xl shadow-lg text-center">
+                        <div class="mx-auto bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="users" class="text-yellow-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Impacto Laboral</h3>
+                        <p class="text-slate-600">Desaparición de tareas y roles rutinarios, lo que exige una constante
+                            re-capacitación y adaptación de los profesionales.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. Actividad interactiva -->
+        <div class="slide bg-slate-100">
+            <div class="max-w-4xl w-full text-center">
+                <div
+                    class="inline-block bg-sky-100 text-sky-700 px-6 py-2 rounded-full font-bold mb-8 text-xl flex items-center gap-2 justify-center mx-auto">
+                    <i data-lucide="message-circle-question"></i> Tiempo de Debatir
+                </div>
+                <h2 class="text-5xl font-bold text-slate-800 mb-16 leading-tight">¿Crees que la Inteligencia Artificial
+                    es una <span class="text-emerald-600">OPORTUNIDAD</span> o un <span
+                        class="text-red-600">RIESGO</span> para tu futura profesión?</h2>
+
+                <!-- Botones simulados interactivos para la clase -->
+                <div class="flex flex-col sm:flex-row justify-center gap-8">
+                    <button
+                        class="flex-1 bg-white border-2 border-emerald-500 hover:bg-emerald-50 text-slate-800 p-8 rounded-2xl shadow-xl transition transform hover:scale-105 flex flex-col items-center">
+                        <i data-lucide="thumbs-up" class="w-16 h-16 text-emerald-500 mb-4"></i>
+                        <span class="text-2xl font-bold">Es una Oportunidad</span>
+                    </button>
+                    <button
+                        class="flex-1 bg-white border-2 border-red-500 hover:bg-red-50 text-slate-800 p-8 rounded-2xl shadow-xl transition transform hover:scale-105 flex flex-col items-center">
+                        <i data-lucide="thumbs-down" class="w-16 h-16 text-red-500 mb-4"></i>
+                        <span class="text-2xl font-bold">Es un Riesgo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. Cierre -->
+        <div class="slide bg-gradient-accent text-center">
+            <div class="max-w-5xl w-full">
+                <h2 class="text-3xl text-sky-200 font-semibold mb-12 tracking-wide uppercase">El Veredicto Final</h2>
+                <div class="relative">
+                    <i data-lucide="quote" class="absolute -top-10 -left-10 w-24 h-24 text-sky-400 opacity-30"></i>
+                    <p class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-16 relative z-10">
+                        "La Inteligencia Artificial no reemplazará a los contadores, enfermeros ni abogados.<br><br>Sin
+                        embargo, <span class="text-yellow-300">los profesionales que USAN Inteligencia Artificial
+                            reemplazarán a los que no lo hacen.</span>"
+                    </p>
+                </div>
+                <div class="flex justify-center gap-6 opacity-80">
+                    <i data-lucide="calculator" class="w-10 h-10"></i>
+                    <i data-lucide="stethoscope" class="w-10 h-10"></i>
+                    <i data-lucide="scale" class="w-10 h-10"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. Fuentes -->
+        <div class="slide">
+            <div class="max-w-4xl w-full">
+                <h2 class="text-4xl font-bold text-slate-800 mb-10 flex items-center gap-3">
+                    <i data-lucide="library" class="text-sky-600 w-10 h-10"></i> Fuentes y Referencias (2024-2025)
+                </h2>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
+                        <i data-lucide="external-link" class="text-slate-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-800">Stanford University</h4>
+                            <p class="text-slate-600"><em>Artificial Intelligence Index Report 2024</em> (Reporte anual
+                                sobre el estado global de la IA).</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
+                        <i data-lucide="external-link" class="text-slate-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-800">Organización Mundial de la Salud (OMS)</h4>
+                            <p class="text-slate-600"><em>Consideraciones éticas sobre el uso de la IA para la
+                                    salud</em> (Actualizaciones y lineamientos).</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
+                        <i data-lucide="external-link" class="text-slate-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-800">Foro Económico Mundial (WEF)</h4>
+                            <p class="text-slate-600"><em>Future of Jobs Report</em> (Impacto de la automatización en el
+                                mercado laboral y profesiones tradicionales).</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
+                        <i data-lucide="external-link" class="text-slate-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-800">Thomson Reuters</h4>
+                            <p class="text-slate-600">Reportes corporativos sobre el impacto y adopción de la IA en el
+                                sector legal (LegalTech) y contable.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 text-center text-slate-500 font-semibold">
+                    <p>¡Gracias por su atención!</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de navegación -->
+    <script>
+        // Inicializar Iconos
+        lucide.createIcons();
+
+        // Lógica de Diapositivas
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const counter = document.getElementById('slide-counter');
+        const progressBar = document.getElementById('progress-bar');
+
+        function updateUI() {
+            // Actualizar clases de diapositivas
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Actualizar botones
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+
+            // Actualizar contador numérico
+            counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Actualizar barra de progreso
+            const progressPercentage = ((currentSlide) / (totalSlides - 1)) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateUI();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateUI();
+            }
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Inicializar la interfaz
+        updateUI();
+    </script>
+</body>
+
+</html>
